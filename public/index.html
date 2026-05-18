@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Reservas Académicas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sistema de Reservas Académicas</h1>
+            <p>Gestiona las reservas de espacios universitarios</p>
+        </header>
+
+        <main>
+            <!-- SECCIÓN 1: CREAR USUARIO -->
+            <section class="card">
+                <h2>👤 Crear Usuario</h2>
+                <form id="formUsuario">
+                    <div class="form-group">
+                        <label>Nombre:</label>
+                        <input type="text" id="nombreUsuario" placeholder="Hyrum Paz" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="emailUsuario" placeholder="hpazd@miumg.edu" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Rol:</label>
+                        <select id="rolUsuario" required>
+                            <option value="">Selecciona un rol</option>
+                            <option value="estudiante">Estudiante</option>
+                            <option value="docente">Docente</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                </form>
+                <div id="respuestaUsuario" class="respuesta"></div>
+            </section>
+
+            <!-- SECCIÓN 2: CONSULTAR DISPONIBILIDAD -->
+            <section class="card">
+                <h2>📅 Consultar Disponibilidad</h2>
+                <div class="form-group">
+                    <label>Fecha:</label>
+                    <input type="date" id="fechaDisponibilidad">
+                </div>
+                <div class="form-group">
+                    <label>ID del Espacio:</label>
+                    <input type="number" id="espacioIdDisponibilidad" placeholder="1" min="1">
+                </div>
+                <button type="button" class="btn btn-secondary" onclick="consultarDisponibilidad()">Consultar</button>
+                <div id="respuestaDisponibilidad" class="respuesta"></div>
+            </section>
+
+            <!-- SECCIÓN 3: CREAR RESERVA -->
+            <section class="card">
+                <h2>🎫 Crear Reserva</h2>
+                <form id="formReserva">
+                    <div class="form-group">
+                        <label>ID Usuario:</label>
+                        <input type="number" id="usuarioIdReserva" placeholder="1" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>ID Espacio:</label>
+                        <input type="number" id="espacioIdReserva" placeholder="1" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha:</label>
+                        <input type="date" id="fechaReserva" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Inicio:</label>
+                        <input type="time" id="horaInicioReserva" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora Fin:</label>
+                        <input type="time" id="horaFinReserva" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Hacer Reserva</button>
+                </form>
+                <div id="respuestaReserva" class="respuesta"></div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Wakanda & Hydra © 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        // CREAR USUARIO
+        document.getElementById('formUsuario').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nombre = document.getElementById('nombreUsuario').value;
+            const email = document.getElementById('emailUsuario').value;
+            const rol = document.getElementById('rolUsuario').value;
+
+            try {
+                const response = await fetch('/usuarios', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre, email, rol })
+                });
+                const data = await response.json();
+                const respuestaDiv = document.getElementById('respuestaUsuario');
+                
+                if (response.ok) {
+                    respuestaDiv.className = 'respuesta exito';
+                    respuestaDiv.innerHTML = `✅ ${data.mensaje}. ID: ${data.id}`;
+                    document.getElementById('formUsuario').reset();
+                } else {
+                    respuestaDiv.className = 'respuesta error';
+                    respuestaDiv.innerHTML = `❌ Error: ${data.error}`;
+                }
+            } catch (error) {
+                document.getElementById('respuestaUsuario').className = 'respuesta error';
+                document.getElementById('respuestaUsuario').innerHTML = `❌ Error de conexión: ${error.message}`;
+            }
+        });
+
+        // CONSULTAR DISPONIBILIDAD
+        async function consultarDisponibilidad() {
+            const fecha = document.getElementById('fechaDisponibilidad').value;
+            const espacio_id = document.getElementById('espacioIdDisponibilidad').value;
+
+            if (!fecha || !espacio_id) {
+                document.getElementById('respuestaDisponibilidad').className = 'respuesta error';
+                document.getElementById('respuestaDisponibilidad').innerHTML = '❌ Completa todos los campos';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/disponibilidad?fecha=${fecha}&espacio_id=${espacio_id}`);
+                const data = await response.json();
+                const respuestaDiv = document.getElementById('respuestaDisponibilidad');
+                
+                if (data.ocupado.length === 0) {
+                    respuestaDiv.className = 'respuesta exito';
+                    respuestaDiv.innerHTML = `✅ ${data.mensaje}<br>El espacio está disponible`;
+                } else {
+                    respuestaDiv.className = 'respuesta info';
+                    respuestaDiv.innerHTML = `📋 ${data.mensaje}<br>Horarios ocupados: ${JSON.stringify(data.ocupado)}`;
+                }
+            } catch (error) {
+                document.getElementById('respuestaDisponibilidad').className = 'respuesta error';
+                document.getElementById('respuestaDisponibilidad').innerHTML = `❌ Error: ${error.message}`;
+            }
+        }
+
+        // CREAR RESERVA
+        document.getElementById('formReserva').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const usuario_id = document.getElementById('usuarioIdReserva').value;
+            const espacio_id = document.getElementById('espacioIdReserva').value;
+            const fecha = document.getElementById('fechaReserva').value;
+            const hora_inicio = document.getElementById('horaInicioReserva').value;
+            const hora_fin = document.getElementById('horaFinReserva').value;
+
+            try {
+                const response = await fetch('/reservar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario_id, espacio_id, fecha, hora_inicio, hora_fin })
+                });
+                const data = await response.json();
+                const respuestaDiv = document.getElementById('respuestaReserva');
+                
+                if (response.ok) {
+                    respuestaDiv.className = 'respuesta exito';
+                    respuestaDiv.innerHTML = `✅ ${data.mensaje}. ID Reserva: ${data.id}`;
+                    document.getElementById('formReserva').reset();
+                } else {
+                    respuestaDiv.className = 'respuesta error';
+                    respuestaDiv.innerHTML = `❌ Error: ${data.error}`;
+                }
+            } catch (error) {
+                document.getElementById('respuestaReserva').className = 'respuesta error';
+                document.getElementById('respuestaReserva').innerHTML = `❌ Error de conexión: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>

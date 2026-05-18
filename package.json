@@ -1,0 +1,17 @@
+{
+  "name": "sistema-de-reservas-academicas",
+  "version": "1.0.0",
+  "description": "Sistema de reservas académicas para espacios universitarios",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["reservas", "academicas"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^6.0.1"
+  }
+}

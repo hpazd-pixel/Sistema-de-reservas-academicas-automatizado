@@ -1,0 +1,188 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --spidey-red: #ff0037;
+    --spidey-blue: #00d4ff;
+    --dark-bg: #050505;
+    --glass-bg: rgba(20, 20, 35, 0.85);
+    --neon-shadow: 0 0 15px rgba(255, 0, 55, 0.4);
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    /* Fondo oscuro con un toque de azul profundo */
+    background: radial-gradient(circle at top, #1a1a2e 0%, #050505 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: white;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--glass-bg);
+    border-radius: 20px;
+    overflow: hidden;
+    /* Efecto cristal y borde de neón sutil */
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), var(--neon-shadow);
+}
+
+header {
+    background: linear-gradient(180deg, rgba(255, 0, 55, 0.2) 0%, transparent 100%);
+    color: white;
+    padding: 50px 20px;
+    text-align: center;
+    border-bottom: 2px solid var(--spidey-red);
+}
+
+header h1 {
+    font-size: 3em;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-weight: 900;
+    text-shadow: 2px 2px 0px var(--spidey-red), -1px -1px 0px var(--spidey-blue);
+}
+
+header p {
+    font-size: 1em;
+    color: var(--spidey-blue);
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+main {
+    padding: 40px 20px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.01);
+    border-color: var(--spidey-blue);
+}
+
+.card h2 {
+    color: var(--spidey-red);
+    margin-bottom: 25px;
+    font-size: 1.6em;
+    text-transform: uppercase;
+    border-left: 4px solid var(--spidey-red);
+    padding-left: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--spidey-blue);
+    text-transform: uppercase;
+    font-size: 0.85em;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="date"],
+input[type="time"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px; /* Bordes más rectos para look moderno */
+    font-size: 1em;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--spidey-blue);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.btn {
+    padding: 14px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    width: 30%;
+}
+
+.btn-primary {
+    background: var(--spidey-red);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 0, 55, 0.4);
+    margin-top: 20px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px) skewX(-5deg); /* Efecto dinámico */
+    box-shadow: 0 0 25px var(--spidey-red);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+    margin-top: 20px;
+}
+
+.btn-secondary:hover {
+    background: white;
+    color: black;
+}
+
+.respuesta {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    border-left: 5px solid;
+}
+
+.respuesta.exito {
+    background: rgba(0, 255, 127, 0.1);
+    color: #00ff7f;
+    border-color: #00ff7f;
+}
+
+.respuesta.error {
+    background: rgba(255, 0, 55, 0.1);
+    color: var(--spidey-red);
+    border-color: var(--spidey-red);
+}
+
+footer {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 25px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9em;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .btn { width: 100%; margin-bottom: 10px; }
+    header h1 { font-size: 2em; }
+}
