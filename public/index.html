@@ -97,6 +97,19 @@
             const email = document.getElementById('emailUsuario').value;
             const rol = document.getElementById('rolUsuario').value;
 
+            // Validación antes de enviar
+            if (!nombre || !email || !rol) {
+                document.getElementById('respuestaUsuario').className = 'respuesta error';
+                document.getElementById('respuestaUsuario').innerHTML = '❌ Por favor completa todos los campos';
+                return;
+            }
+
+            if (!email.includes('@')) {
+                document.getElementById('respuestaUsuario').className = 'respuesta error';
+                document.getElementById('respuestaUsuario').innerHTML = '❌ Email inválido';
+                return;
+            }
+
             try {
                 const response = await fetch('/usuarios', {
                     method: 'POST',

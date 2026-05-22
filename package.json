@@ -4,7 +4,8 @@
   "description": "Sistema de reservas académicas para espacios universitarios",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "python3 test_reservas.py",
+    "server": "node server.js",
     "dev": "node server.js"
   },
   "keywords": ["reservas", "academicas"],

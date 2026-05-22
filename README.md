@@ -76,6 +76,61 @@ Se mostrará una interfaz gráfica amigable para usar el sistema.
 
 ---
 
+## 🧪 Pruebas Automatizadas (Con Selenium)
+
+El proyecto incluye una **suite completa de pruebas automatizadas** que valida automáticamente todo el sistema.
+
+### Requisitos para Tests
+- Python 3.9+
+- Google Chrome instalado
+
+### Instalación de Dependencias de Tests
+
+```bash
+pip3 install -r requirements.txt
+```
+
+### Ejecutar las Pruebas
+
+**Opción 1: Con npm**
+```bash
+npm start
+```
+
+**Opción 2: Script ejecutable**
+```bash
+./test.sh
+```
+
+**Opción 3: Directamente con Python**
+```bash
+python3 test_reservas.py
+```
+
+### Pruebas Incluidas
+
+✅ **Test 1: Crear Usuario** - Registra un usuario en el sistema
+✅ **Test 2: Consultar Disponibilidad** - Verifica horarios disponibles
+✅ **Test 3: Crear Reserva** - Crea una reserva de espacio académico
+
+### Características de Tests
+
+- 🤖 Automatización completa con Selenium WebDriver
+- 📊 Reportes HTML automáticos en `/reportes/`
+- ✔️ Validación contra base de datos SQLite
+- 🌐 Navegador real (no headless) para visualizar
+- ⏱️ Tiempos de ejecución por cada prueba
+- 📋 Detalles completos de errores si ocurren
+
+### Archivos de Tests
+
+- `test_reservas.py` - Suite de pruebas Selenium
+- `requirements.txt` - Dependencias Python (Selenium, pyunitreport)
+- `test.sh` / `run_tests.sh` - Scripts ejecutables
+- `README_TESTS.md` - Documentación detallada de tests
+
+---
+
 ## 📂 Estructura del Proyecto
 
 ```
@@ -170,6 +225,15 @@ El sistema valida automáticamente que no haya conflictos de horarios.
 
 ## 📝 Cambios Recientes
 
+✨ **v2.0.0** - Suite de Pruebas Automatizadas con Selenium
+- Implementado framework de pruebas automatizadas con Selenium WebDriver
+- Crear 3 tests automatizados (usuario, disponibilidad, reserva)
+- Generación automática de reportes HTML
+- Integración de webdriver-manager para gestión de ChromeDriver
+- Documentación completa en README_TESTS.md
+- Scripts ejecutables (test.sh, run_tests.sh)
+- Validación contra base de datos SQLite
+
 ✨ **v1.1.0** - Interfaz Gráfica Mejorada
 - Creada carpeta `public/` con interfaz web moderna
 - Actualizado `index.html` con formularios interactivos
@@ -200,6 +264,21 @@ El sistema valida automáticamente que no haya conflictos de horarios.
 
 **Cambios en HTML/CSS no se reflejan**
 - Solución: Recarga la página con F5 o Ctrl+Shift+R (limpia caché)
+
+### Tests Automatizados
+
+**Error: "ChromeDriver no encontrado"**
+- Solución: `pip3 install --upgrade webdriver-manager`
+
+**Error: "No module named 'selenium'"**
+- Solución: `pip3 install -r requirements.txt`
+
+**Los tests fallan o se cuelgan**
+- Solución: Verificar que no hay otra instancia del servidor corriendo
+- Ejecutar: `lsof -ti:3000 | xargs kill -9`
+
+**Base de datos bloqueada en tests**
+- Solución: `rm -f academico.sqlite` y ejecutar los tests nuevamente
 
 ---
 

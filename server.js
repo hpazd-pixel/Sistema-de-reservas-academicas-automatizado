@@ -14,10 +14,29 @@ app.get('/', (req, res) => {
 // --- 1. ENDPOINT: REGISTRO DE USUARIOS (Para tener con quién reservar) ---
 app.post('/usuarios', (req, res) => {
     const { nombre, email, rol } = req.body;
+    
+    // Validación en el servidor
+    if (!nombre || !email || !rol) {
+        return res.status(400).json({ error: "Nombre, email y rol son obligatorios" });
+    }
+    
+    if (!email.includes('@')) {
+        return res.status(400).json({ error: "Email inválido" });
+    }
+    
+    if (!['estudiante', 'docente'].includes(rol)) {
+        return res.status(400).json({ error: "Rol debe ser 'estudiante' o 'docente'" });
+    }
+    
     const sql = `INSERT INTO usuarios (nombre, email, rol) VALUES (?, ?, ?)`;
     
     db.run(sql, [nombre, email, rol], function(err) {
-        if (err) return res.status(400).json({ error: err.message });
+        if (err) {
+            if (err.message.includes('UNIQUE constraint failed')) {
+                return res.status(400).json({ error: "Este email ya está registrado" });
+            }
+            return res.status(400).json({ error: err.message });
+        }
         res.json({ mensaje: "Usuario creado", id: this.lastID });
     });
 });
