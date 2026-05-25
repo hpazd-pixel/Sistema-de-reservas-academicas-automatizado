@@ -76,35 +76,47 @@ class TestSistemaReservas(unittest.TestCase):
         driver = self.driver
         driver.get('http://localhost:3000')
         
-        print("\n👤 Test 1: Creando usuario...")
-        
-        # Rellenar formulario de usuario
+        print("\n👤 Test 1: Iniciando...")
+        wait = WebDriverWait(driver, 10)
+        time.sleep(5)  # Pausa para que veas la carga
+
+        # 1. Llenar Nombre con escritura humana
         nombre_input = driver.find_element(By.ID, 'nombreUsuario')
+        print("   Intentando escribir nombre...")
+        nombre_input.click()
         nombre_input.clear()
-        nombre_input.send_keys('Hyrum Paz')
-        
+        for letra in "Dvora Arreaga":
+            nombre_input.send_keys(letra)
+            time.sleep(0.05)
+
+        # 2. Llenar Email
+        print("   Intentando escribir email...")
         email_input = driver.find_element(By.ID, 'emailUsuario')
-        email_input.clear()
-        email_input.send_keys(f'hpaz{int(time.time())}@miumg.edu')
-        
+        email_input.click()
+        email_input.send_keys(f'darreaga{int(time.time())}@miumg.edu')
+
+        # 3. Seleccionar Rol
+        print("   Seleccionando rol...")
         rol_select = Select(driver.find_element(By.ID, 'rolUsuario'))
         rol_select.select_by_value('estudiante')
-        
-        # Hacer clic en el botón de envío
-        submit_button = driver.find_element(By.XPATH, '//*[@id="formUsuario"]//button[@type="submit"]')
-        submit_button.click()
-        
-        # Esperar a la respuesta
-        time.sleep(2)
-        
-        # Verificar que se creó el usuario
-        respuesta = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.ID, 'respuestaUsuario'))
-        )
+
+        # 4. Enviar Formulario
+        print("   Enviando formulario...")
+        submit = driver.find_element(By.CSS_SELECTOR, "#formUsuario button[type='submit']")
+        driver.execute_script("arguments[0].scrollIntoView(true);", submit)
+        time.sleep(1)
+        submit.click()
+
+        # 5. VERIFICACIÓN DE RESPUESTA (Lo que faltaba)
+        print("   Esperando confirmación del servidor...")
+        respuesta = wait.until(EC.presence_of_element_located((By.ID, 'respuestaUsuario')))
         
         resultado = respuesta.text
-        self.assertIn('Usuario creado', resultado, "El usuario no fue creado correctamente")
+        # Esto es lo que realmente dice si el test pasó o falló
+        self.assertIn('Usuario creado', resultado, f"❌ ERROR: El mensaje fue: {resultado}")
         print(f"✅ Usuario creado exitosamente: {resultado}")
+
+
 
     def test_02_consultar_disponibilidad(self):
         """Test 2: Consultar disponibilidad de espacios"""
